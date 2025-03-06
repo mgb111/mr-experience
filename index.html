@@ -36,19 +36,20 @@
           loop
           muted
           playsinline
+          crossorigin="anonymous"
         ></video>
       </a-assets>
 
       <!-- Add a marker (Hiro marker for testing) -->
       <a-marker preset="hiro">
-        <!-- Add a 2D video -->
+        <!-- Add a 2D video positioned on top of the marker -->
         <a-video
           id="ar-video"
           src="#video-source"
           width="4"
           height="2.25"
-          position="0 1.5 0"
-          rotation="0 0 0"
+          position="0 0.5 0"
+          rotation="-90 0 0"
         ></a-video>
       </a-marker>
 
@@ -61,9 +62,12 @@
       const unmuteButton = document.getElementById("unmute-button");
       const videoSource = document.getElementById("video-source");
 
-      // Ensure video starts playing once marker is detected
+      // Ensure video starts playing once the marker is detected
       document.querySelector("a-marker").addEventListener("markerFound", () => {
-        videoSource.play().catch((e) => console.log("Autoplay failed:", e));
+        console.log("Marker found - playing video");
+        setTimeout(() => {
+          videoSource.play().catch((e) => console.log("Autoplay failed:", e));
+        }, 500); // Small delay to ensure video loads
       });
 
       // Handle unmute button click
@@ -74,7 +78,13 @@
         // Hide the unmute button
         unmuteButton.style.display = "none";
       });
+
+      // Ensure video plays on interaction
+      document.addEventListener("click", () => {
+        videoSource.play().catch((e) => console.log("Manual play failed:", e));
+      });
     </script>
   </body>
 </html>
+
 
