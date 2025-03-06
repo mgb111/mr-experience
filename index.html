@@ -33,9 +33,9 @@
         <video
           id="video-source"
           src="https://www.w3schools.com/html/mov_bbb.mp4"
-          autoplay
           loop
           muted
+          playsinline
         ></video>
       </a-assets>
 
@@ -43,6 +43,7 @@
       <a-marker preset="hiro">
         <!-- Add a 2D video -->
         <a-video
+          id="ar-video"
           src="#video-source"
           width="4"
           height="2.25"
@@ -56,13 +57,19 @@
     </a-scene>
 
     <script>
-      // Handle unmute button click
+      // Get references to elements
       const unmuteButton = document.getElementById("unmute-button");
       const videoSource = document.getElementById("video-source");
 
+      // Ensure video starts playing once marker is detected
+      document.querySelector("a-marker").addEventListener("markerFound", () => {
+        videoSource.play().catch((e) => console.log("Autoplay failed:", e));
+      });
+
+      // Handle unmute button click
       unmuteButton.addEventListener("click", () => {
-        // Unmute the video
         videoSource.muted = false;
+        videoSource.play().catch((e) => console.log("Play failed:", e));
 
         // Hide the unmute button
         unmuteButton.style.display = "none";
@@ -70,3 +77,4 @@
     </script>
   </body>
 </html>
+
