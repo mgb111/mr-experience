@@ -28,22 +28,26 @@
 
     <!-- AR Scene -->
     <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false;">
-      <!-- Add a marker -->
-      <a-marker
-        type="pattern"
-        url="http://codeskulptor-assets.commondatastorage.googleapis.com/assets_clock_background.png"
-      >
+      <!-- Assets -->
+      <a-assets>
+        <video
+          id="video-source"
+          src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+          autoplay
+          loop
+          muted
+        ></video>
+      </a-assets>
+
+      <!-- Add a marker (Hiro marker for testing) -->
+      <a-marker preset="hiro">
         <!-- Add a 2D video -->
         <a-video
-          id="video"
-          src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+          src="#video-source"
           width="4"
           height="2.25"
           position="0 1.5 0"
           rotation="0 0 0"
-          autoplay="true"
-          loop="true"
-          muted="true"
         ></a-video>
       </a-marker>
 
@@ -54,12 +58,11 @@
     <script>
       // Handle unmute button click
       const unmuteButton = document.getElementById("unmute-button");
-      const video = document.getElementById("video");
+      const videoSource = document.getElementById("video-source");
 
       unmuteButton.addEventListener("click", () => {
         // Unmute the video
-        const videoElement = video.components.material.material.map.image;
-        videoElement.muted = false;
+        videoSource.muted = false;
 
         // Hide the unmute button
         unmuteButton.style.display = "none";
