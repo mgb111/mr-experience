@@ -30,9 +30,10 @@
     <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false;">
       <!-- Assets -->
       <a-assets>
+        <!-- Local video file (Place 'mov_bbb.mp4' in the same folder as this HTML file) -->
         <video
           id="video-source"
-          src="https://www.w3schools.com/html/mov_bbb.mp4"
+          src="mov_bbb.mp4"
           loop
           muted
           playsinline
@@ -63,25 +64,37 @@
       const videoSource = document.getElementById("video-source");
 
       // Ensure video starts playing once the marker is detected
-      document.querySelector("a-marker").addEventListener("markerFound", () => {
-        console.log("Marker found - playing video");
-        setTimeout(() => {
-          videoSource.play().catch((e) => console.log("Autoplay failed:", e));
-        }, 500); // Small delay to ensure video loads
+      document.querySelector("a-marker").addEventListener("markerFound", async () => {
+        console.log("Marker found - attempting to play video");
+        try {
+          await videoSource.play();
+          console.log("Video playing successfully");
+        } catch (error) {
+          console.log("Error playing video:", error);
+        }
       });
 
       // Handle unmute button click
-      unmuteButton.addEventListener("click", () => {
+      unmuteButton.addEventListener("click", async () => {
         videoSource.muted = false;
-        videoSource.play().catch((e) => console.log("Play failed:", e));
+        try {
+          await videoSource.play();
+          console.log("Unmuted and playing video");
+        } catch (error) {
+          console.log("Unmute play failed:", error);
+        }
 
         // Hide the unmute button
         unmuteButton.style.display = "none";
       });
 
-      // Ensure video plays on interaction
-      document.addEventListener("click", () => {
-        videoSource.play().catch((e) => console.log("Manual play failed:", e));
+      // Ensure video plays on user interaction
+      document.addEventListener("click", async () => {
+        try {
+          await videoSource.play();
+        } catch (error) {
+          console.log("Manual play failed:", error);
+        }
       });
     </script>
   </body>
