@@ -37,11 +37,10 @@
     <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: true;">
         <!-- Assets -->
         <a-assets>
-            <!-- Online video file -->
+            <!-- Using a different tested online video -->
             <video id="video-source"
-                   src="https://www.w3schools.com/html/mov_bbb.mp4"
-                   loop muted playsinline
-                   crossorigin="anonymous">
+                   src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4"
+                   loop muted playsinline crossorigin="anonymous">
             </video>
         </a-assets>
 
@@ -60,23 +59,23 @@
         const unmuteButton = document.getElementById("unmute-button");
         const videoSource = document.getElementById("video-source");
 
-        // Ensure video loads
+        // Ensure video loads properly
         videoSource.addEventListener("loadeddata", () => {
-            console.log("Video loaded successfully!");
+            console.log("✅ Video loaded successfully!");
         });
 
         videoSource.addEventListener("error", () => {
-            console.error("Error loading video. Check if the URL is accessible.");
+            console.error("❌ Error loading video. Check if the URL is accessible.");
         });
 
         // Play video when marker is detected
         document.querySelector("a-marker").addEventListener("markerFound", async () => {
-            console.log("Marker found - attempting to play video");
+            console.log("🎯 Marker found - attempting to play video");
             try {
                 await videoSource.play();
-                console.log("Video playing successfully");
+                console.log("🎬 Video playing successfully");
             } catch (error) {
-                console.error("Error playing video:", error);
+                console.error("❌ Error playing video:", error);
             }
         });
 
@@ -84,9 +83,9 @@
         playButton.addEventListener("click", async () => {
             try {
                 await videoSource.play();
-                console.log("Play button pressed, video playing...");
+                console.log("▶️ Play button pressed, video playing...");
             } catch (error) {
-                console.error("Play button failed to play video:", error);
+                console.error("❌ Play button failed to play video:", error);
             }
         });
 
@@ -95,9 +94,9 @@
             videoSource.muted = false;
             try {
                 await videoSource.play();
-                console.log("Unmuted and playing video");
+                console.log("🔊 Unmuted and playing video");
             } catch (error) {
-                console.error("Unmute play failed:", error);
+                console.error("❌ Unmute play failed:", error);
             }
             unmuteButton.style.display = "none"; // Hide button after unmuting
         });
@@ -107,11 +106,9 @@
             try {
                 await videoSource.play();
             } catch (error) {
-                console.error("User click play failed:", error);
+                console.error("❌ User click play failed:", error);
             }
         });
     </script>
 </body>
 </html>
-
-
