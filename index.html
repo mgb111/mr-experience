@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MR Experience with Marker-Based AR</title>
+    <title>Custom Marker AR</title>
     <script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
     <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
     <style>
@@ -33,18 +33,18 @@
         <button id="unmute-button">Unmute</button>
     </div>
 
-    <!-- AR Scene with Zoom Fix -->
+    <!-- AR Scene with Custom Marker -->
     <a-scene embedded arjs="sourceType: webcam; sourceWidth: 1280; sourceHeight: 720; fit: true;">
         <!-- Assets -->
         <a-assets>
             <video id="video-source"
-                   src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4"
+                   src="https://tesseractpvt-my.sharepoint.com/:v:/g/personal/manish_bhanushali_tesseract_in/ETA4hcNYQu5JpwuaiWdous0BTqex71gJ9185t9BBmkAWzQ?e=CyRzH9"
                    loop muted playsinline crossorigin="anonymous">
             </video>
         </a-assets>
 
-        <!-- Marker for AR video -->
-        <a-marker preset="hiro">
+        <!-- Custom Marker -->
+        <a-marker type="pattern" url="https://static.tnn.in/thumb/msid-104833148,thumbsize-196917,width-1280,height-720,resizemode-75/104833148.jpg">
             <a-video id="ar-video" src="#video-source" width="4" height="2.25" position="0 0.5 0" rotation="-90 0 0"></a-video>
         </a-marker>
 
