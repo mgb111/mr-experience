@@ -91,22 +91,26 @@
 
         // Unmute button to enable audio
         unmuteButton.addEventListener("click", async () => {
-            videoSource.muted = false;
-            try {
-                await videoSource.play();
-                console.log("🔊 Unmuted and playing video");
-            } catch (error) {
-                console.error("❌ Unmute play failed:", error);
+            if (videoSource.paused) {
+                try {
+                    await videoSource.play();
+                } catch (error) {
+                    console.error("❌ Unmute play failed:", error);
+                }
             }
+            videoSource.muted = false;
+            console.log("🔊 Unmuted and playing video");
             unmuteButton.style.display = "none"; // Hide button after unmuting
         });
 
         // Ensure video plays on any user interaction
         document.addEventListener("click", async () => {
-            try {
-                await videoSource.play();
-            } catch (error) {
-                console.error("❌ User click play failed:", error);
+            if (videoSource.paused) {
+                try {
+                    await videoSource.play();
+                } catch (error) {
+                    console.error("❌ User click play failed:", error);
+                }
             }
         });
     </script>
