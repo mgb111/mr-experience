@@ -1,103 +1,117 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8" />
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MR Experience with Marker-Based AR</title>
     <script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
     <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
     <style>
-      /* Style for the unmute button */
-      #unmute-button {
-        position: absolute;
-        top: 10px;
-        left: 10px;
-        padding: 10px 20px;
-        font-size: 16px;
-        cursor: pointer;
-        z-index: 1000;
-        background-color: #007bff;
-        color: white;
-        border: none;
-        border-radius: 5px;
-      }
+        /* Style for the buttons */
+        #controls {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            z-index: 1000;
+        }
+        button {
+            padding: 10px;
+            margin: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
     </style>
-  </head>
-  <body>
-    <!-- Unmute button -->
-    <button id="unmute-button">Unmute</button>
+</head>
+<body>
+    <!-- Control Buttons -->
+    <div id="controls">
+        <button id="play-button">Play Video</button>
+        <button id="unmute-button">Unmute</button>
+    </div>
 
     <!-- AR Scene -->
-    <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false;">
-      <!-- Assets -->
-      <a-assets>
-        <!-- Local video file (Place 'mov_bbb.mp4' in the same folder as this HTML file) -->
-        <video
-          id="video-source"
-          src="mov_bbb.mp4"
-          loop
-          muted
-          playsinline
-          crossorigin="anonymous"
-        ></video>
-      </a-assets>
+    <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: true;">
+        <!-- Assets -->
+        <a-assets>
+            <!-- Online video file -->
+            <video id="video-source"
+                   src="https://www.w3schools.com/html/mov_bbb.mp4"
+                   loop muted playsinline
+                   crossorigin="anonymous">
+            </video>
+        </a-assets>
 
-      <!-- Add a marker (Hiro marker for testing) -->
-      <a-marker preset="hiro">
-        <!-- Add a 2D video positioned on top of the marker -->
-        <a-video
-          id="ar-video"
-          src="#video-source"
-          width="4"
-          height="2.25"
-          position="0 0.5 0"
-          rotation="-90 0 0"
-        ></a-video>
-      </a-marker>
+        <!-- Add a marker (Hiro marker for testing) -->
+        <a-marker preset="hiro">
+            <!-- 2D video positioned on top of the marker -->
+            <a-video id="ar-video" src="#video-source" width="4" height="2.25" position="0 0.5 0" rotation="-90 0 0"></a-video>
+        </a-marker>
 
-      <!-- Add a camera -->
-      <a-entity camera></a-entity>
+        <!-- Add a camera -->
+        <a-entity camera></a-entity>
     </a-scene>
 
     <script>
-      // Get references to elements
-      const unmuteButton = document.getElementById("unmute-button");
-      const videoSource = document.getElementById("video-source");
+        const playButton = document.getElementById("play-button");
+        const unmuteButton = document.getElementById("unmute-button");
+        const videoSource = document.getElementById("video-source");
 
-      // Ensure video starts playing once the marker is detected
-      document.querySelector("a-marker").addEventListener("markerFound", async () => {
-        console.log("Marker found - attempting to play video");
-        try {
-          await videoSource.play();
-          console.log("Video playing successfully");
-        } catch (error) {
-          console.log("Error playing video:", error);
-        }
-      });
+        // Ensure video loads
+        videoSource.addEventListener("loadeddata", () => {
+            console.log("Video loaded successfully!");
+        });
 
-      // Handle unmute button click
-      unmuteButton.addEventListener("click", async () => {
-        videoSource.muted = false;
-        try {
-          await videoSource.play();
-          console.log("Unmuted and playing video");
-        } catch (error) {
-          console.log("Unmute play failed:", error);
-        }
+        videoSource.addEventListener("error", () => {
+            console.error("Error loading video. Check if the URL is accessible.");
+        });
 
-        // Hide the unmute button
-        unmuteButton.style.display = "none";
-      });
+        // Play video when marker is detected
+        document.querySelector("a-marker").addEventListener("markerFound", async () => {
+            console.log("Marker found - attempting to play video");
+            try {
+                await videoSource.play();
+                console.log("Video playing successfully");
+            } catch (error) {
+                console.error("Error playing video:", error);
+            }
+        });
 
-      // Ensure video plays on user interaction
-      document.addEventListener("click", async () => {
-        try {
-          await videoSource.play();
-        } catch (error) {
-          console.log("Manual play failed:", error);
-        }
-      });
+        // Play button to manually start video
+        playButton.addEventListener("click", async () => {
+            try {
+                await videoSource.play();
+                console.log("Play button pressed, video playing...");
+            } catch (error) {
+                console.error("Play button failed to play video:", error);
+            }
+        });
+
+        // Unmute button to enable audio
+        unmuteButton.addEventListener("click", async () => {
+            videoSource.muted = false;
+            try {
+                await videoSource.play();
+                console.log("Unmuted and playing video");
+            } catch (error) {
+                console.error("Unmute play failed:", error);
+            }
+            unmuteButton.style.display = "none"; // Hide button after unmuting
+        });
+
+        // Ensure video plays on any user interaction
+        document.addEventListener("click", async () => {
+            try {
+                await videoSource.play();
+            } catch (error) {
+                console.error("User click play failed:", error);
+            }
+        });
     </script>
-  </body>
+</body>
 </html>
 
 
